@@ -1,11 +1,11 @@
-const Brand 			 = require('../../../models/brand'),
-			Publications = require('../../../models/publications');
+const Brand = require('../../../models/brand');
+const Publications = require('../../../models/publications');
 
 /**
  * @class InpiDBTools
  * @description Database manipulation tools.
  */
-const InpiDbTools = function() {
+const InpiDbTools = function () {
 	return {
 		/**
 		 * @param {Object}

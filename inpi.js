@@ -24,14 +24,14 @@ async function inpiUpdate(config) {
 					magazines = JSON.parse(list);
 
 		console.clear();
-		h.log('Jinpi v1.0 \n\n');
+		console.log('Jinpi v1.0 \n\n');
 
 		for (let prop in magazines ) {
-			h.log('---------------------------------------------------------');
-			h.log('# revista: '+magazines[prop].numero);
+			console.log('---------------------------------------------------------');
+			console.log('# revista: '+magazines[prop].numero);
 			await h.sleep(3000);
 			if(! await hasData(magazines[prop].numero) ) {
-				h.log('> baixando '+magazines[prop].nomeArquivoEscritorio+'...');
+				console.log('> baixando '+magazines[prop].nomeArquivoEscritorio+'...');
 				let xml = await inpiGet({ url: url.host+'/txt/'+magazines[prop].nomeArquivoEscritorio, encoding: null }, false);
 				await prepareProcess(xml);
 			} else {
@@ -55,7 +55,7 @@ function inpiGet(config, list = true) {
 			if ( list == true ) 
 				return resolve(body);
 
-			h.log('> descompactando...')
+			console.log('> descompactando...')
 			let zip 			 = new AdmZip(body),
 					zipEntries = zip.getEntries();
 
@@ -93,7 +93,7 @@ function prepareProcess(xml) {
 			magazineNumber = json['revista']['numero'],
 			magazineDate   = json['revista']['data'];
 
-	h.log('> coletando processos...');
+	console.log('> coletando processos...');
 	
 	for (let i in json['revista']['processo']) {
 		(async () => {

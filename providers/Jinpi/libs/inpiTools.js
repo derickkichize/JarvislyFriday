@@ -39,7 +39,7 @@ const InpiTools = function () {
      * @return {JSON}
      * @description downloads a list of inpi magazines.
      */
-    getList: async (url) => { 
+    getList: async (url) => {
       let data = await _vm.get({ url: url, encoding: 'utf-8' });
       return await JSON.parse(data);
     },
