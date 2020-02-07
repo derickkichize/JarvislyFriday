@@ -1,0 +1,17 @@
+{
+  "name": "jarvisly-manager",
+  "version": "1.0.0",
+  "description": "",
+  "main": "inpi.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": " <derick.kichize@infodesk.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "adm-zip": "^0.4.13",
+    "mongoose": "^5.8.11",
+    "request": "^2.88.0",
+    "xml2json": "^0.12.0"
+  }
+}
