@@ -1,7 +1,11 @@
 const Debug	      = require('../../../libs/Dialogs/Debug/Debug'),
       h           = require('../../../libs/helpers'),
       InpiDbTools = require('./inpiDbTools');
-
+/**
+ * @param {JSON} json
+ * @description configure and save data in the bank
+ * @return {void}
+ */
 module.exports = async function (json) {
   const magazineNumber = json['revista']['numero'],
         magazineDate   = json['revista']['data'],
