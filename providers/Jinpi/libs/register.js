@@ -1,16 +1,15 @@
-const Debug	= require('../../../libs/Dialogs/Debug/Debug'),
+const Debug	      = require('../../../libs/Dialogs/Debug/Debug'),
+      h           = require('../../../libs/helpers'),
       InpiDbTools = require('./inpiDbTools');
 
-module.exports = function (json) {
+module.exports = async function (json) {
   const magazineNumber = json['revista']['numero'],
         magazineDate   = json['revista']['data'],
         debug          = new Debug();
-        inpiDb         = new InpiDbTools();
-
-  debug.log('> coletando processos...');
-  for (let i in json['revista']['processo']) {
-    (async () => {
-      let data = await {
+    debug.log('revista '+magazineNumber);
+    console.log('--------------------------------------------------');
+    for  (let i in json['revista']['processo']) { 
+      await InpiDbTools().createBrand({
         magazineNumber	 : magazineNumber,
         magazineDate		 : magazineDate,
         processNumber 	 : json['revista']['processo'][i]['numero'],
@@ -27,17 +26,15 @@ module.exports = function (json) {
         handout					 : json['revista']['processo'][i]['apostila'],
         unionistPriority : json['revista']['processo'][i]['prioridade-unionista'],
         listNiceClass    : json['revista']['processo'][i]['lista-classe-nice'],
-      };
+      });
+      debug.info('processo '+json['revista']['processo'][i]['numero']+' migrado');
+      await h.sleep(300);
+    }
 
-      (async () => await inpiDb.createBrand(data));
-      await h.sleep(3000);
-    })();
-  }
-
-  (async () => await inpiDb.createPublication({ 
-    magazineNumber: magazineNumber, 
-    magazineDate	: magazineDate 
-  }))();
-
-	debug.info('revista '+magazineNumber+' publicada');
+    await h.sleep(3000);
+    await InpiDbTools().createPublication({ 
+      magazineNumber: magazineNumber, 
+      magazineDate	: magazineDate 
+    });
+    debug.info('revista '+magazineNumber+' publicada');
 }

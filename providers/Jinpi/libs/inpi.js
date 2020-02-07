@@ -60,20 +60,14 @@ const Inpi = function() {
 				Dialog();
 
 				for ( let prop in list ) {
-					debug.info('revista '+list[prop].numero);
-
 					if(! await inpiDb.has(list[prop].numero)) {
-						debug.log(list[prop].nomeArquivoEscritorio);
-						let zippedFile = await inpiTools.getFile(_vm.url.host+'/txt/'+list[prop].nomeArquivoEscritorio);
-						debug.log('descompactando '+list[prop].nomeArquivoEscritorio);
-						let xml  = await h.unzip(zippedFile),
+						let zippedFile = await inpiTools.getFile(_vm.url.host+'/txt/'+list[prop].nomeArquivoEscritorio),
+								xml  = await h.unzip(zippedFile),
 								json = JSON.parse(parser.toJson(xml.toString()));
 						register(json);
 					} else {
 						debug.warn('ignorando revista '+list[prop].numero+' revista ja esta publicada');
 					}
-
-					debug.log('-------------------------------------------------');
 				}
 			} catch (error) {
 				debug.warn(error.message);
