@@ -1,4 +1,4 @@
-const mongoose = require('../database/database.js');
+const mongoose = require('../../config/database/database');
 
 const BrandSchema = new mongoose.Schema({
 	magazineNumber: { type: String, required: true },

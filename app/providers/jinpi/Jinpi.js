@@ -1,13 +1,13 @@
 const qs = require('querystring');
-const InpiTools = require('./inpiTools');
-const InpiDbTools = require('./inpiDbTools');
+const InpiTools = require('./libs/inpiTools');
+const InpiDbTools = require('./libs/inpiDbTools');
 const Dialog = require('./JinpiDialog');
 const Debug = require('../../../libs/Dialogs/Debug/Debug');
-const register = require('../libs/register');
+const register = require('./libs/register');
 const parser = require('xml2json');
 const h = require('../../../libs/helpers');
 
-const Inpi = function () {
+const Jinpi = function () {
 
 	/**
 	 * @constant _vm
@@ -76,4 +76,4 @@ const Inpi = function () {
 	};
 }
 
-module.exports = Inpi;
+module.exports = Jinpi;

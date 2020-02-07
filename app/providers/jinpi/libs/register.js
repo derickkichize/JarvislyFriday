@@ -1,5 +1,5 @@
-const Debug = require('../../../libs/Dialogs/Debug/Debug');
-const h = require('../../../libs/helpers');
+const Debug = require('../../../../libs/Dialogs/Debug/Debug');
+const h = require('../../../../libs/helpers');
 const InpiDbTools = require('./inpiDbTools');
 /**
  * @param {JSON} json
