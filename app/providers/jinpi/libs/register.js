@@ -34,20 +34,18 @@ module.exports = async function (brand) {
       brand             : _process[i]['marca'],
       handout           : _process[i]['apostila'],
       unionistPriority  : _process[i]['prioridade-unionista'],
-      // listNiceClass     : _process[i]['lista-classe-nice']
+      listNiceClass     : _process[i]['lista-classe-nice']
     };
-    
-    // let dispatches       = _process[i]['despachos'];
-    // let holders          = _process[i]['titulares'];
-    // let overstands       = _process[i]['sobrestadores'];
-    // let brand            = _process[i]['marca'];
-    let listNiceClass    = _process[i]['lista-classe-nice'];
 
-    // data.holders       = Array.isArray(holders)       ? holders       : [holders['titular']];
-    // data.overstands    = Array.isArray(overstands)    ? overstands    : [overstands['sobrestador']];
-    data.listNiceClass = Array.isArray(listNiceClass) ? listNiceClass : [listNiceClass['classe-nice']];
+    if(_process[i].hasOwnProperty('lista-classe-nice')) {
+      let listNiceClass = _process[i]['lista-classe-nice'];
+      data.listNiceClass = Array.isArray(listNiceClass) ? listNiceClass : [listNiceClass['classe-nice']];
+    } else {
+      data.listNiceClass = undefined;
+    }
+
     await InpiDbTools().createBrand(data);
-    debug.info(`processo ${brand['revista']['processo'][i]['numero']} migrado`);
+    //debug.info(`processo ${brand['revista']['processo'][i]['numero']} migrado`);
   }
 
   await InpiDbTools().createPublication({

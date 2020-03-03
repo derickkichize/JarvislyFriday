@@ -63,10 +63,10 @@ const Jinpi = function () {
 				for (let prop in list) {
 					if (! await inpiDb.has(list[prop].numero)) {
 						let zippedFile = await inpiTools.getFile(_vm.url.host + '/txt/' + list[prop].nomeArquivoEscritorio);
-						let xml = await h.unzip(zippedFile);
-						let json = JSON.parse(parser.toJson(xml.toString()));
-						// await register(json);
-						await writeFile(json);
+						let xmlFile = await h.unzip(zippedFile);
+						let brand = JSON.parse(parser.toJson(xmlFile.toString()));
+						await register(brand);
+						// await writeFile(json);
 					} else {
 						debug.warn('ignorando revista ' + list[prop].numero + ' revista ja esta publicada');
 					}
