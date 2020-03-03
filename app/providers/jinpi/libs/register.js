@@ -1,43 +1,55 @@
 const Debug = require('../../../../libs/Dialogs/Debug/Debug');
 const h = require('../../../../libs/helpers');
 const InpiDbTools = require('./inpiDbTools');
+const moment = require('moment');
 /**
- * @param {JSON} json
+ * @param {brand} brand
  * @description configure and save data in the bank
  * @return {void}
  */
-module.exports = async function (json) {
-  const magazineNumber = json['revista']['numero'];
-  const magazineDate = json['revista']['data'];
+module.exports = async function (brand) {
+  const magazineNumber = brand['revista']['numero'];
+  const magazineDate = brand['revista']['data'];
   const debug = new Debug();
 
   debug.log(`revista ${magazineNumber}`);
   console.log('--------------------------------------------------');
 
-  for (let i in json['revista']['processo']) {
-    await InpiDbTools().createBrand({
-      magazineNumber: magazineNumber,
-      magazineDate: magazineDate,
-      processNumber: json['revista']['processo'][i]['numero'],
-      dispatches: json['revista']['processo'][i]['despachos'],
-      holders: json['revista']['processo'][i]['titulares'],
-      attorney: json['revista']['processo'][i]['procurador'],
-      overstands: json['revista']['processo'][i]['sobrestadores'],
-      depositDate: json['revista']['processo'][i]['data-deposito'],
-      grantDate: json['revista']['processo'][i]['data-concessao'],
-      effectiveDate: json['revista']['processo'][i]['data-vigencia'],
-      niceClass: json['revista']['processo'][i]['classe-nice'],
-      viennaClasses: json['revista']['processo'][i]['classes-vienna'],
-      brand: json['revista']['processo'][i]['marca'],
-      handout: json['revista']['processo'][i]['apostila'],
-      unionistPriority: json['revista']['processo'][i]['prioridade-unionista'],
-      listNiceClass: json['revista']['processo'][i]['lista-classe-nice'],
-    });
-    debug.info(`processo ${json['revista']['processo'][i]['numero']} migrado`);
-    await h.sleep(300);
+  let _process = brand['revista']['processo']
+
+  for (let i in _process) {
+
+    let data = {
+      magazineNumber    : magazineNumber,
+      magazineDate      : moment(magazineDate, 'DD/MM/YYYY').format('YYYY/MM/DD'),
+      processNumber     : _process[i]['numero'],
+      dispatches        : _process[i]['despachos'],
+      holders           : _process[i]['titulares'],
+      attorney          : _process[i]['procurador'],
+      overstands        : _process[i]['sobrestadores'],
+      depositDate       : _process[i]['data-deposito'],
+      grantDate         : _process[i]['data-concessao'],
+      effectiveDate     : _process[i]['data-vigencia'],
+      viennaClasses     : _process[i]['classes-vienna'],
+      brand             : _process[i]['marca'],
+      handout           : _process[i]['apostila'],
+      unionistPriority  : _process[i]['prioridade-unionista'],
+      // listNiceClass     : _process[i]['lista-classe-nice']
+    };
+    
+    // let dispatches       = _process[i]['despachos'];
+    // let holders          = _process[i]['titulares'];
+    // let overstands       = _process[i]['sobrestadores'];
+    // let brand            = _process[i]['marca'];
+    let listNiceClass    = _process[i]['lista-classe-nice'];
+
+    // data.holders       = Array.isArray(holders)       ? holders       : [holders['titular']];
+    // data.overstands    = Array.isArray(overstands)    ? overstands    : [overstands['sobrestador']];
+    data.listNiceClass = Array.isArray(listNiceClass) ? listNiceClass : [listNiceClass['classe-nice']];
+    await InpiDbTools().createBrand(data);
+    debug.info(`processo ${brand['revista']['processo'][i]['numero']} migrado`);
   }
 
-  await h.sleep(3000);
   await InpiDbTools().createPublication({
     magazineNumber: magazineNumber,
     magazineDate: magazineDate

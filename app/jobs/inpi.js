@@ -7,6 +7,13 @@ const moment = require('moment');
  */
 module.exports = () => {
   let jinpi = new Jinpi();
-  jinpi.setDate({ startDate: '01/01/2000', endDate: moment().format('L').toString() })
-  jinpi.update();
+  
+  jinpi.setDate({ 
+    startDate: '01/01/2000', 
+    endDate: moment()
+      .format('L')
+      .toString() 
+  })
+
+  return jinpi.update();
 }

@@ -4,6 +4,7 @@ const InpiDbTools = require('./libs/inpiDbTools');
 const Dialog = require('./JinpiDialog');
 const Debug = require('../../../libs/Dialogs/Debug/Debug');
 const register = require('./libs/register');
+const writeFile = require('./libs/writeFile');
 const parser = require('xml2json');
 const h = require('../../../libs/helpers');
 
@@ -64,7 +65,8 @@ const Jinpi = function () {
 						let zippedFile = await inpiTools.getFile(_vm.url.host + '/txt/' + list[prop].nomeArquivoEscritorio);
 						let xml = await h.unzip(zippedFile);
 						let json = JSON.parse(parser.toJson(xml.toString()));
-						await register(json);
+						// await register(json);
+						await writeFile(json);
 					} else {
 						debug.warn('ignorando revista ' + list[prop].numero + ' revista ja esta publicada');
 					}
