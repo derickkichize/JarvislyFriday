@@ -4,7 +4,8 @@
   "description": "",
   "main": "inpi.js",
   "scripts": {
-    "inpiSync": "node ./app/providers/scripts/inpiSync.js"
+    "inpiSync": "node ./app/providers/scripts/inpiSync.js",
+    "start": "nodemon ./app/providers/scripts/inpiSync.js"
   },
   "author": " <derick.kichize@infodesk.com>",
   "license": "ISC",
