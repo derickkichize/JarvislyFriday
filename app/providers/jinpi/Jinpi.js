@@ -66,15 +66,10 @@ const Jinpi = function() {
 
           if (!await inpiDb.has(list[prop].numero)) {
 
-            let zippedFile = await inpiTools.getFile(
-                _vm.url.host + '/txt/' + list[prop].nomeArquivoEscritorio);
+            let zippedFile = await inpiTools.getFile(_vm.url.host+'/txt/'+list[prop].nomeArquivoEscritorio);
             let xmlFile = await h.unzip(zippedFile);
             let magazine = JSON.parse(parser.toJson(xmlFile.toString()));
-
-            console.warn('REVISTA:', magazine.revista);
             await register(magazine.revista);
-
-            break;
 
             // await writeFile(json);
           } else {
