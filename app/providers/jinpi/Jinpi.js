@@ -7,9 +7,7 @@ const register = require('./libs/register');
 const writeFile = require('./libs/writeFile');
 const parser = require('xml2json');
 const h = require('../../../libs/helpers');
-/**
- * @name Jinpi
- */
+
 const Jinpi = function() {
 
   /**
