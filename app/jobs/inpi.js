@@ -1,3 +1,4 @@
+const Jinpi = require('../providers/jinpi/Jinpi');
 const moment = require('moment');
 
 /**
