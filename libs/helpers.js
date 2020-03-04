@@ -1,17 +1,19 @@
 const AdmZip = require('adm-zip');
+const fs = require('fs');
 
 /**
  * @description global methods helper
  */
 module.exports = {
-
 	/**
+	 * @name sleep
 	 * @param {number} ms
 	 * @description interrupts the process for the specified time.
 	 */
 	sleep: ms => new Promise((res) => setInterval(res, ms)),
 
 	/**
+	 * @name readableBytes
 	 * @param {number} bytes
 	 * @description Shows human-readable bytes data.
 	 */
@@ -22,6 +24,7 @@ module.exports = {
 	},
 
 	/**
+	 * @name unzip
 	 * @param {Buffer} zippedFile
 	 * @description decompresses zipped data.
 	 */
@@ -36,5 +39,15 @@ module.exports = {
 			}
 		}
 		return buf;
+	},
+	/**
+	 * @name log
+	 * @param {String} dataLog
+	 * @description write a log file.
+	 */
+	log: (dataLog) => {
+		fs.writeFile('tmp/'+new Date().getTime()+'.log', dataLog, err => {
+			(err) ? console.log(err) : console.log(_process[i]['numero']+' saved');
+		})
 	}
 }
