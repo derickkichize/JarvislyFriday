@@ -15,6 +15,7 @@ const BrandSchema = new mongoose.Schema({
 	brand: { type: Object },
 	handout: { type: Object },
 	unionistPriority: { type: Object },
+	nationalClass: { type: Object },
 	listNiceClass: { type: Object }
 }, { versionKey: false });
 

@@ -120,8 +120,10 @@ module.exports = async function(magazine) {
           data.dispatches.protocol.applicant = {};
 
           if (_dispatch[0].protocolo.requerente.hasOwnProperty('nome-razao-social')) {
-            data.dispatches.protocol.applicant.companyName = ( _dispatch[0].protocolo.requerente['nome-razao-social'] != null) 
-            && _dispatch[0].protocolo.requerente['nome-razao-social'];
+            let _companyName = _dispatch[0].protocolo.requerente['nome-razao-social']
+            if(typeof _companyName != null && typeof _companyName != 'undefined') {
+              data.dispatches.protocol.applicant.companyName = _companyName;
+            }
           }
 
           if (_dispatch[0].protocolo.requerente.hasOwnProperty('pais')){
@@ -146,12 +148,18 @@ module.exports = async function(magazine) {
         }));
       }
 
-      data.holders = {};
-      data.holders.holder = {
-        companyName: _holders.titular['nome-razao-social'],
-        country: _holders.titular['pais'],
-        state: _holders.titular['uf'],
-      };
+      let holder = new Object;
+      
+      if (_holders.titular.hasOwnProperty('nome-razao-social'))
+        holder.companyName = _holders.titular['nome-razao-social'];
+      
+      if (_holders.titular.hasOwnProperty('pais'))
+        holder.country = _holders.titular['pais'];
+    
+      if (_holders.titular.hasOwnProperty('uf'))
+        holder.state = _holders.titular['uf'];
+      
+        data.holders = { holder : holder };
     }
 
     if (doc.hasOwnProperty('sobrestadores')) {
@@ -226,7 +234,7 @@ module.exports = async function(magazine) {
         }
       }
 
-      data.nationalClass = _national.subNationalClass
+      data.nationalClass = _national.subNationalClass;
     }
     
     await InpiDbTools().createBrand(data);
