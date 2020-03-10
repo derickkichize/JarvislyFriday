@@ -5,6 +5,7 @@ const Dialog = require('./JinpiDialog');
 const Debug = require('../../../libs/Dialogs/Debug/Debug');
 const parser = require('xml2json');
 const h = require('../../../libs/helpers');
+const iconv = require('iconv');
 const xmlFilter = require('./filters/xmlFilter');
 const txtFilter = require('./filters/txtFilter');
 
@@ -73,7 +74,7 @@ const Jinpi = function () {
                   await xmlFilter(xmlMagazine.revista);  
                   break;
                 case 'txt':
-                  let txtMagazine = JSON.parse(parser.toJson(file.buffer.toString()));
+                  let txtMagazine = file.buffer.toString('utf-8');
                   await txtFilter(txtMagazine, list[prop].dataPublicacao, list[prop].numero);
                   break;
               }

@@ -5,21 +5,22 @@ const moment = require('moment');
 
 module.exports = async function (txt, magazineDate, magazineNumber) {
   const debug = new Debug();
-  
   for (let doc of txt.split(/\r?\n/)) {
+
     let data = {
-      number: magazineNumber,
-      date: magazineDate,
+      magazineNumber: magazineNumber,
+      magazineDate:  moment(magazineDate,'DD/MM/YYYY').format('YYYY/MM/DD'),
+      processNumber: '',
       brand: new Object
     };
 
     if (doc.match(/\W*(No[.])\W*/)) {
       let sp = doc.split(" ");
       let depositDate = sp[2];
-      let processNumber = sp[0].replace(/\D+/g, '');
+      let processNumber = await sp[0].replace(/\D+/g, '');
       let dispatchCode = sp[4];
-      data.depositDate = depositDate;
-      data.processNumber = processNumber;
+      data.depositDate =  moment(depositDate,'DD/MM/YYYY').format('YYYY/MM/DD');
+      data.processNumber = await processNumber.toString();
       data.dispatch = { code: dispatchCode };
     }
 

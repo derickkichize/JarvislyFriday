@@ -11,6 +11,8 @@
   "license": "ISC",
   "devDependencies": {
     "adm-zip": "^0.4.13",
+    "iconv": "^2.3.5",
+    "iconv-lite": "^0.5.1",
     "mongoose": "^5.8.11",
     "request": "^2.88.0",
     "xml2json": "^0.12.0"

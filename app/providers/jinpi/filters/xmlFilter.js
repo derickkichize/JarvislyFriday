@@ -138,28 +138,22 @@ module.exports = async function(magazine) {
     }
 
     if (doc.hasOwnProperty('titulares')) {
-      let _holders = doc['titulares'];
+      if(doc['titulares'].hasOwnProperty('titular')) {
 
-      if(_holders.length > 2) {
-        h.log(JSON.stringify({
-          magazineNumber: number,
-          process: process['numero'],
-          holders: _holders
-        }));
-      }
+        let _holders = doc['titulares'];
+        let holder = new Object;
 
-      let holder = new Object;
-      
-      if (_holders.titular.hasOwnProperty('nome-razao-social'))
+        if (_holders.titular.hasOwnProperty('nome-razao-social'))
         holder.companyName = _holders.titular['nome-razao-social'];
+        
+        if (_holders.titular.hasOwnProperty('pais'))
+          holder.country = _holders.titular['pais'];
       
-      if (_holders.titular.hasOwnProperty('pais'))
-        holder.country = _holders.titular['pais'];
-    
-      if (_holders.titular.hasOwnProperty('uf'))
-        holder.state = _holders.titular['uf'];
-      
-        data.holders = { holder : holder };
+        if (_holders.titular.hasOwnProperty('uf'))
+          holder.state = _holders.titular['uf'];
+        
+          data.holders = { holder : holder };
+      }
     }
 
     if (doc.hasOwnProperty('sobrestadores')) {
