@@ -1,6 +1,6 @@
 const Debug = require('../../../../libs/Dialogs/Debug/Debug');
 const h = require('../../../../libs/helpers');
-const InpiDbTools = require('./inpiDbTools');
+const InpiDbTools = require('../libs/inpiDbTools');
 const moment = require('moment');
 
 /**
@@ -17,8 +17,7 @@ module.exports = async function(magazine) {
 
   debug.log(`magazine ${number}, ${date}`);
 
-  for (const doc of process) {
-
+  for (let doc of process) {
     let data = {
       magazineNumber: number,
       magazineDate: moment(date,'DD/MM/YYYY').format('YYYY/MM/DD'),
@@ -39,7 +38,18 @@ module.exports = async function(magazine) {
     }
 
     if (doc.hasOwnProperty('marca')) {  
-      data.brand = doc.marca;
+      let brand = doc.marca,
+          _brand = {};
+
+      if(brand.hasOwnProperty('nome'))
+        _brand.name = brand.nome;
+      
+      if(brand.hasOwnProperty('apresentacao'))
+        _brand.presentation = brand.apresentacao;
+
+      if(brand.hasOwnProperty('natureza'))
+        _brand.nature = brand.natureza;
+      data.brand = _brand;
     }
 
     if (doc.hasOwnProperty('lista-classe-nice')) {
@@ -110,7 +120,8 @@ module.exports = async function(magazine) {
           data.dispatches.protocol.applicant = {};
 
           if (_dispatch[0].protocolo.requerente.hasOwnProperty('nome-razao-social')) {
-            data.dispatches.protocol.applicant.companyName = _dispatch[0].protocolo.requerente['nome-razao-social'];
+            data.dispatches.protocol.applicant.companyName = ( _dispatch[0].protocolo.requerente['nome-razao-social'] != null) 
+            && _dispatch[0].protocolo.requerente['nome-razao-social'];
           }
 
           if (_dispatch[0].protocolo.requerente.hasOwnProperty('pais')){
@@ -192,8 +203,34 @@ module.exports = async function(magazine) {
       data.handout = doc.apostila;
     }
 
+    if(doc.hasOwnProperty('classe-nacional')) {
+      let _national = {};
+      if (doc['classe-nacional'].hasOwnProperty('codigo')) {
+        _national.code = doc['classe-nacional'].codigo;
+      }
+
+      if (doc['classe-nacional'].hasOwnProperty('especificacao')) {
+        _national.especification = doc['classe-nacional'].especificacao;
+      }
+
+      if (doc['classe-nacional'].hasOwnProperty('sub-classes-nacional')) {
+        let subNatClass = Object.values(doc['classe-nacional']['sub-classes-nacional']);
+
+        if(Array.isArray(subNatClass[0])) {
+          _national.subNationalClass = [];
+          for (let sub of subNatClass[0] ) {
+            _national.subNationalClass.push({code: sub.codigo});
+          }
+        } else {
+          _national.subNationalClass = {code: subNatClass[0].codigo}
+        }
+      }
+
+      data.nationalClass = _national.subNationalClass
+    }
+    
     await InpiDbTools().createBrand(data);
-    debug.info(`processo ${doc.numero} migrado`);  
+    debug.info(`processo ${doc.numero} migrado`);
   }
 
   await InpiDbTools().createPublication({

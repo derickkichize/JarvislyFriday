@@ -29,16 +29,17 @@ module.exports = {
 	 * @description decompresses zipped data.
 	 */
 	unzip: (zippedFile) => {
-		let buf = new Array,
+    let buf = new Array,
+      ext = null,
 			zip = new AdmZip(zippedFile),
 			zipEntries = zip.getEntries();
 
 		for (let entry in zipEntries) {
-			if (zipEntries[entry].entryName.substr(-3) === 'xml') {
-				buf.push(zip.readAsText(zipEntries[entry]));
-			}
+      ext = zipEntries[entry].entryName.substr(-3);
+			buf.push(zip.readAsText(zipEntries[entry]));
 		}
-		return buf;
+		
+		return { ext: ext, buffer: buf};
 	},
 	/**
 	 * @name log
@@ -47,7 +48,7 @@ module.exports = {
 	 */
 	log: (dataLog) => {
 		fs.writeFile('tmp/'+new Date().getTime()+'.log', dataLog, err => {
-			(err) ? console.log(err) : console.log(_process[i]['numero']+' saved');
+			(err) ? console.log(err) : console.log('saved');
 		})
 	}
 }
