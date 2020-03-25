@@ -20,34 +20,37 @@ module.exports = async function(magazine) {
   for (let doc of process) {
     let data = {
       magazineNumber: number,
-      magazineDate: moment(date,'DD/MM/YYYY').format('YYYY/MM/DD'),
+      magazineDate: moment(date, 'DD/MM/YYYY').format('YYYY/MM/DD'),
       processNumber: doc.numero,
-      attorney: doc.procurador
+      attorney: doc.procurador,
     };
-    
+
     if (doc.hasOwnProperty('data-deposito')) {
-      data.depositDate = moment(doc['data-deposito'],'DD/MM/YYYY').format('YYYY/MM/DD');
+      data.depositDate = moment(doc['data-deposito'], 'DD/MM/YYYY').
+          format('YYYY/MM/DD');
     }
 
     if (doc.hasOwnProperty('data-concessao')) {
-      data.grantDate = moment(doc['data-concessao'],'DD/MM/YYYY').format('YYYY/MM/DD');
+      data.grantDate = moment(doc['data-concessao'], 'DD/MM/YYYY').
+          format('YYYY/MM/DD');
     }
 
     if (doc.hasOwnProperty('data-vigencia')) {
-      data.effectiveDate = moment(doc['data-vigencia'],'DD/MM/YYYY').format('YYYY/MM/DD');
+      data.effectiveDate = moment(doc['data-vigencia'], 'DD/MM/YYYY').
+          format('YYYY/MM/DD');
     }
 
-    if (doc.hasOwnProperty('marca')) {  
+    if (doc.hasOwnProperty('marca')) {
       let brand = doc.marca,
           _brand = {};
 
-      if(brand.hasOwnProperty('nome'))
+      if (brand.hasOwnProperty('nome'))
         _brand.name = brand.nome;
-      
-      if(brand.hasOwnProperty('apresentacao'))
+
+      if (brand.hasOwnProperty('apresentacao'))
         _brand.presentation = brand.apresentacao;
 
-      if(brand.hasOwnProperty('natureza'))
+      if (brand.hasOwnProperty('natureza'))
         _brand.nature = brand.natureza;
       data.brand = _brand;
     }
@@ -66,13 +69,13 @@ module.exports = async function(magazine) {
             code: nice.codigo,
             especification: nice.especificacao,
             status: nice.status,
-          })
+          });
         }
       } else {
         data.listNiceClass.niceClass = {
           code: _nice['classe-nice'].codigo,
           especification: _nice['classe-nice'].especificacao,
-          status: _nice['classe-nice'].status
+          status: _nice['classe-nice'].status,
         };
       }
     }
@@ -84,15 +87,15 @@ module.exports = async function(magazine) {
       data.viennaClasses = {};
       data.viennaClasses.edition = _vienna[0];
 
-      if(Array.isArray(_vienna[1])) {
+      if (Array.isArray(_vienna[1])) {
         data.viennaClasses.viennaClass = [];
         for (let code of _vienna[1]) {
           data.viennaClasses.viennaClass.push({'code': code['codigo']});
         }
       } else {
-        data.viennaClasses.viennaClass = { 'code' : _vienna[1]['codigo'] };
+        data.viennaClasses.viennaClass = {'code': _vienna[1]['codigo']};
       }
-      
+
     }
 
     if (doc.hasOwnProperty('despachos')) {
@@ -102,31 +105,34 @@ module.exports = async function(magazine) {
       data.dispatches = {};
       data.dispatches.code = _dispatch[0]['codigo'];
       data.dispatches.name = _dispatch[0]['nome'];
-      
+
       if (_dispatch[0].hasOwnProperty('texto-complementar')) {
         data.dispatches.description = _dispatch[0]['texto-complementar'];
       }
-      
+
       if (_dispatch[0].hasOwnProperty('protocolo')) {
 
         data.dispatches.protocol = {
           number: _dispatch[0].protocolo.numero,
-          date: new Date(moment(_dispatch[0].protocolo.data, 'DD/MM/YYYY').format('YYYY/MM/DD')),
+          date: new Date(moment(_dispatch[0].protocolo.data, 'DD/MM/YYYY').
+              format('YYYY/MM/DD')),
           serviceCode: _dispatch[0].protocolo.codigoServico,
-          attorney : _dispatch[0].protocolo.procurador
-        }
+          attorney: _dispatch[0].protocolo.procurador,
+        };
 
-        if (_dispatch[0].protocolo.hasOwnProperty('requerente')) {   
+        if (_dispatch[0].protocolo.hasOwnProperty('requerente')) {
           data.dispatches.protocol.applicant = {};
 
-          if (_dispatch[0].protocolo.requerente.hasOwnProperty('nome-razao-social')) {
-            let _companyName = _dispatch[0].protocolo.requerente['nome-razao-social']
-            if(typeof _companyName != null && typeof _companyName != 'undefined') {
+          if (_dispatch[0].protocolo.requerente.hasOwnProperty(
+              'nome-razao-social')) {
+            let _companyName = _dispatch[0].protocolo.requerente['nome-razao-social'];
+            if (typeof _companyName != null && typeof _companyName !=
+                'undefined') {
               data.dispatches.protocol.applicant.companyName = _companyName;
             }
           }
 
-          if (_dispatch[0].protocolo.requerente.hasOwnProperty('pais')){
+          if (_dispatch[0].protocolo.requerente.hasOwnProperty('pais')) {
             data.dispatches.protocol.applicant.country = _dispatch[0].protocolo.requerente.pais;
           }
 
@@ -138,21 +144,21 @@ module.exports = async function(magazine) {
     }
 
     if (doc.hasOwnProperty('titulares')) {
-      if(doc['titulares'].hasOwnProperty('titular')) {
+      if (doc['titulares'].hasOwnProperty('titular')) {
 
         let _holders = doc['titulares'];
         let holder = new Object;
 
         if (_holders.titular.hasOwnProperty('nome-razao-social'))
-        holder.companyName = _holders.titular['nome-razao-social'];
-        
+          holder.companyName = _holders.titular['nome-razao-social'];
+
         if (_holders.titular.hasOwnProperty('pais'))
           holder.country = _holders.titular['pais'];
-      
+
         if (_holders.titular.hasOwnProperty('uf'))
           holder.state = _holders.titular['uf'];
-        
-          data.holders = { holder : holder };
+
+        data.holders = {holder: holder};
       }
     }
 
@@ -161,20 +167,20 @@ module.exports = async function(magazine) {
 
       data.overstands = {};
 
-      if ( Array.isArray(_overstands.sobrestador) ) {
+      if (Array.isArray(_overstands.sobrestador)) {
         data.overstands.overstand = [];
-        
+
         for (let _overstand of _overstands.sobrestador) {
-           data.overstands.overstand.push({
-             process: _overstand.processo,
-             brand: _overstand.marca,
-           });
+          data.overstands.overstand.push({
+            process: _overstand.processo,
+            brand: _overstand.marca,
+          });
         }
       } else {
         data.overstands.overstand = {
           process: _overstands.sobrestador.processo,
-          brand: _overstands.sobrestador.marca
-        }
+          brand: _overstands.sobrestador.marca,
+        };
       }
     }
 
@@ -182,21 +188,23 @@ module.exports = async function(magazine) {
       let _priority = doc['prioridade-unionista'];
       data.unionistPriority = {};
 
-      if(Array.isArray(_priority.prioridade)) {
+      if (Array.isArray(_priority.prioridade)) {
         data.unionistPriority.priority = [];
-        for ( let priority of _priority.prioridade) {
-          
+        for (let priority of _priority.prioridade) {
+
           data.unionistPriority.priority.push({
-            date: new Date(moment(priority.data, 'DD/MM/YYYY').format('YYYY/MM/DD')),
+            date: new Date(
+                moment(priority.data, 'DD/MM/YYYY').format('YYYY/MM/DD')),
             number: priority.numero,
-            country: priority.pais
+            country: priority.pais,
           });
         }
       } else {
         data.unionistPriority.priority = {
-          date: new Date(moment(_priority.prioridade.data, 'DD/MM/YYYY').format('YYYY/MM/DD')),
+          date: new Date(moment(_priority.prioridade.data, 'DD/MM/YYYY').
+              format('YYYY/MM/DD')),
           number: _priority.prioridade.numero,
-          country: _priority.prioridade.pais
+          country: _priority.prioridade.pais,
         };
       }
     }
@@ -205,7 +213,7 @@ module.exports = async function(magazine) {
       data.handout = doc.apostila;
     }
 
-    if(doc.hasOwnProperty('classe-nacional')) {
+    if (doc.hasOwnProperty('classe-nacional')) {
       let _national = {};
       if (doc['classe-nacional'].hasOwnProperty('codigo')) {
         _national.code = doc['classe-nacional'].codigo;
@@ -216,21 +224,22 @@ module.exports = async function(magazine) {
       }
 
       if (doc['classe-nacional'].hasOwnProperty('sub-classes-nacional')) {
-        let subNatClass = Object.values(doc['classe-nacional']['sub-classes-nacional']);
+        let subNatClass = Object.values(
+            doc['classe-nacional']['sub-classes-nacional']);
 
-        if(Array.isArray(subNatClass[0])) {
+        if (Array.isArray(subNatClass[0])) {
           _national.subNationalClass = [];
-          for (let sub of subNatClass[0] ) {
+          for (let sub of subNatClass[0]) {
             _national.subNationalClass.push({code: sub.codigo});
           }
         } else {
-          _national.subNationalClass = {code: subNatClass[0].codigo}
+          _national.subNationalClass = {code: subNatClass[0].codigo};
         }
       }
 
       data.nationalClass = _national.subNationalClass;
     }
-    
+
     await InpiDbTools().createBrand(data);
     debug.info(`processo ${doc.numero} migrado`);
   }
