@@ -4,7 +4,7 @@
   "description": "",
   "main": "inpi.js",
   "scripts": {
-    "sync": "node ./app/providers/scripts/inpiSync.js",
+    "sync": "nodemon ./app/providers/scripts/inpiSync.js",
     "serve": "nodemon index.js"
   },
   "author": " <derick.kichize@infodesk.com>",

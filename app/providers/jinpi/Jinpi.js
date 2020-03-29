@@ -9,7 +9,7 @@ const iconv = require('iconv');
 const xmlFilter = require('./filters/xmlFilter');
 const txtFilter = require('./filters/txtFilter');
 
-const Jinpi = function() {
+const Jinpi = function () {
 
   /**
    * @constant _vm
@@ -32,7 +32,7 @@ const Jinpi = function() {
        * @type {Object}
        * @description stores date data in an argument list
        */
-      const {startDate, endDate} = config;
+      const { startDate, endDate } = config;
 
       return _vm.url = {
         host: 'http://revistas.inpi.gov.br',
@@ -47,43 +47,42 @@ const Jinpi = function() {
      * @param {void}
      * @description update inpi brand magazines.
      */
-    update: async function() {
+    update: async function () {
       const inpiTools = new InpiTools();
       const inpiDb = new InpiDbTools();
       const debug = new Debug;
       const list = await inpiTools.getList(Object.values(_vm.url).join(''));
-      console.warn('list > ', list);
+
       try {
 
         if (!_vm.hasOwnProperty('url')) throw new Error('url is not set');
 
-        // Dialog();
+        Dialog();
 
         for (let prop in list) {
-          if (list[prop].hasOwnProperty('nomeArquivoEscritorio')) {
-
+          if (list[prop].hasOwnProperty('nomeArquivoEscritorio') && list[prop].numero < 2203) {
             if (!await inpiDb.has(list[prop].numero)) {
 
               let zippedFile = await inpiTools.getFile(
-                  _vm.url.host + '/txt/' + list[prop].nomeArquivoEscritorio);
+                _vm.url.host + '/txt/' + list[prop].nomeArquivoEscritorio);
               let file = await h.unzip(zippedFile);
 
               switch (file.ext) {
                 case 'xml':
                   let xmlMagazine = JSON.parse(
-                      parser.toJson(file.buffer.toString()));
+                    parser.toJson(file.buffer.toString()));
                   await xmlFilter(xmlMagazine.revista);
                   break;
                 case 'txt':
                   let txtMagazine = file.buffer.toString('utf-8');
                   await txtFilter(txtMagazine, list[prop].dataPublicacao,
-                      list[prop].numero);
+                    list[prop].numero);
                   break;
               }
 
             } else {
               debug.warn('ignorando revista ' + list[prop].numero +
-                  ' revista ja esta publicada');
+                ' revista ja esta publicada');
             }
           }
         }

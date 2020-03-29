@@ -12,6 +12,7 @@ const moment = require('moment');
 module.exports = async function(magazine) {
   const number = magazine['numero'];
   const date = magazine['data'];
+  
   const process = magazine['processo'];
   const debug = new Debug();
 
