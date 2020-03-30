@@ -59,7 +59,7 @@ const Jinpi = function () {
         Dialog();
 
         for (let prop in list) {
-          if (list[prop].hasOwnProperty('nomeArquivoEscritorio')) {
+          if (list[prop].hasOwnProperty('nomeArquivoEscritorio') && list[prop].numero) {
             if (!await inpiDb.has(list[prop].numero)) {
 
               let zippedFile = await inpiTools.getFile(
