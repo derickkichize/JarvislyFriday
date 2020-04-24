@@ -6,22 +6,23 @@ const moment = require('moment');
 
 module.exports = async function (txt, magazineDate, magazineNumber) {
   const debug = new Debug();
-
-  let data = new Object();
-  let brand = new Object();
+  
+  let data = new Object;
+  let brand = new Object;
   const processList = [];
 
   for (line of txt.split(/\r?\n/)) {
+    
     if (line.match(/\W*(No[.])\W*/)) {
       let json = await trap.headerTrap(line);
-      Object.assign(data, json);
+      Object.assign(data, json); 
     }
 
     if (line.match(/\W*(Tit[.])\W*/)) {
       let json = await trap.holderTrap(line);
-      Object.assign(data, json);
+      Object.assign(data, json); 
     }
-
+    
     if (line.match(/\W*(Marca)\W*/)) {
       let json = await trap.brandTrap(line);
       brand.name = json;
@@ -29,7 +30,7 @@ module.exports = async function (txt, magazineDate, magazineNumber) {
 
     if (line.match(/\W*(Procurador[:])\W*/)) {
       let json = await trap.attorneyTrap(line);
-      Object.assign(data, json);
+      Object.assign(data, json); 
     }
 
     if (line.match(/\W*(Apres[.])\W*/)) {
@@ -39,44 +40,43 @@ module.exports = async function (txt, magazineDate, magazineNumber) {
     }
 
     if (line.match(/\W*(CFE[(])\W*/)) {
-      let json = await trap.classViennaTrap(line);
-      Object.assign(data, json);
+      
+      let json = await trap.classViennaTrap(line)
+      Object.assign(data,json);
     }
 
     if (line.match(/\W*(NCL[(])\W*/)) {
-      let json = await trap.listNiceClassTrap(line);
-      Object.assign(data, json);
+      
+      let json = await trap.listNiceClassTrap(line)
+      Object.assign(data,json);
     }
-
+    
     if (line.match(/\W*(Clas.Prod\/Serv:)\W*/)) {
       let json = await trap.nationalClassTrap(line);
-      Object.assign(data, json);
+      Object.assign(data,json);
     }
 
     if (line.match(/\W*(Prior[.][:])\W*/)) {
       let json = await trap.unionistPriorityTrap(line);
-      Object.assign(data, json);
+      Object.assign(data,json);
     }
 
     if (line.match(/\W*(Apostila[:])\W*/)) {
       let json = await trap.handoutTrap(line);
-      Object.assign(data, json);
+      Object.assign(data,json);
     }
-    console.warn('LINE FILTER >>>> ', line);
 
     if (line.length === 0 && data.hasOwnProperty('processNumber')) {
-      data.magazineDate = moment(magazineDate, 'DD/MM/YYYY').format(
-        'YYYY/MM/DD'
-      );
+      data.magazineDate = moment(magazineDate, 'DD/MM/YYYY').format('YYYY/MM/DD');
       data.magazineNumber = magazineNumber;
       data.brand = brand;
 
       processList.push(data);
-      data = new Object();
+      data = new Object;
     }
   }
 
-  for (let proc of processList) {
+  for ( let proc of processList) {
     await InpiDbTools().createBrand(proc);
     debug.info(`processo ${proc.processNumber} migrado`);
   }
@@ -87,3 +87,4 @@ module.exports = async function (txt, magazineDate, magazineNumber) {
   });
   debug.info(`revista ${magazineNumber} publicada`);
 };
+

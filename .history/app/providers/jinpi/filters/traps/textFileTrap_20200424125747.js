@@ -70,7 +70,7 @@ async function classViennaTrap(doc) {
     let edition = sp[0].match(/[0-9]/);
     console.warn('EDITION > ', edition);
 
-    if (edition && edition.length > 0) vienna.edition = edition[0];
+    if (edition.length > 0) vienna.edition = edition[0];
 
     sp.splice(0, 1);
     console.warn('SP > ', sp);

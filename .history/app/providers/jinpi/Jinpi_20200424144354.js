@@ -49,10 +49,7 @@ const Jinpi = function () {
       const inpiDb = new InpiDbTools();
       const debug = new Debug();
       const list = await inpiTools.getList(Object.values(_vm.url).join(''));
-      console.warn(
-        'LISTA> ',
-        list.filter((x) => x.nomeArquivoEscritorio).length
-      );
+      console.warn('LISTA> ', list[87]);
       return;
       try {
         if (!_vm.hasOwnProperty('url')) throw new Error('url is not set');

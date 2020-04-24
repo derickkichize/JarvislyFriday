@@ -51,7 +51,7 @@ const Jinpi = function () {
       const list = await inpiTools.getList(Object.values(_vm.url).join(''));
       console.warn(
         'LISTA> ',
-        list.filter((x) => x.nomeArquivoEscritorio).length
+        list.filter((x) => x.nomeArquivoEscritorio.length)
       );
       return;
       try {

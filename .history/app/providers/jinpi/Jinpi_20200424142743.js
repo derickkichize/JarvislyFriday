@@ -49,10 +49,7 @@ const Jinpi = function () {
       const inpiDb = new InpiDbTools();
       const debug = new Debug();
       const list = await inpiTools.getList(Object.values(_vm.url).join(''));
-      console.warn(
-        'LISTA> ',
-        list.filter((x) => x.nomeArquivoEscritorio).length
-      );
+      console.warn('LIST > ', list.find(x => x.numero === 1690));
       return;
       try {
         if (!_vm.hasOwnProperty('url')) throw new Error('url is not set');
@@ -70,7 +67,7 @@ const Jinpi = function () {
               );
               let file = await h.unzip(zippedFile);
 
-              switch (file.ext.toLowerCase()) {
+              switch (file.ext) {
                 case 'xml':
                   let xmlMagazine = JSON.parse(
                     parser.toJson(file.buffer.toString())

@@ -62,7 +62,7 @@ module.exports = async function (txt, magazineDate, magazineNumber) {
       let json = await trap.handoutTrap(line);
       Object.assign(data, json);
     }
-    console.warn('LINE FILTER >>>> ', line);
+    console.warn('LINE >>>> ', line);
 
     if (line.length === 0 && data.hasOwnProperty('processNumber')) {
       data.magazineDate = moment(magazineDate, 'DD/MM/YYYY').format(
