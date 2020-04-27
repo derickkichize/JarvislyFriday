@@ -4,7 +4,7 @@ const colors = require('../Colors');
  * @param {String} $msg
  * @description helper for testing and printing messages on the debug console.
  */
-const Debug = function() {
+const Debug = function () {
   return {
     /**
      * @param {String} $msg

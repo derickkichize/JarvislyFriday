@@ -10,14 +10,14 @@ module.exports = {
    * @param {number} ms
    * @description interrupts the process for the specified time.
    */
-  sleep: ms => new Promise((res) => setInterval(res, ms)),
+  sleep: (ms) => new Promise((res) => setInterval(res, ms)),
 
   /**
    * @name readableBytes
    * @param {number} bytes
    * @description Shows human-readable bytes data.
    */
-  readableBytes: bytes => {
+  readableBytes: (bytes) => {
     let i = Math.floor(Math.log(bytes) / Math.log(1024));
     let sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
     return (bytes / Math.pow(1024, i)).toFixed(2) * 1 + ' ' + sizes[i];
@@ -29,17 +29,17 @@ module.exports = {
    * @description decompresses zipped data.
    */
   unzip: (zippedFile) => {
-    let buf = new Array,
-        ext = null,
-        zip = new AdmZip(zippedFile),
-        zipEntries = zip.getEntries();
+    let buf = new Array(),
+      ext = null,
+      zip = new AdmZip(zippedFile),
+      zipEntries = zip.getEntries();
 
     for (let entry in zipEntries) {
       ext = zipEntries[entry].entryName.substr(-3);
       buf.push(zip.readAsText(zipEntries[entry]));
     }
 
-    return {ext: ext, buffer: buf};
+    return { ext: ext, buffer: buf };
   },
   /**
    * @name log
@@ -47,8 +47,8 @@ module.exports = {
    * @description write a log file.
    */
   log: (dataLog) => {
-    fs.writeFile('tmp/' + new Date().getTime() + '.log', dataLog, err => {
-      (err) ? console.log(err) : console.log('saved');
+    fs.writeFile('tmp/' + new Date().getTime() + '.log', dataLog, (err) => {
+      err ? console.log(err) : console.log('saved');
     });
   },
 };

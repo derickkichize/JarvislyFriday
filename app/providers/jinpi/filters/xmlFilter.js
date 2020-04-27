@@ -9,10 +9,10 @@ const moment = require('moment');
  * @return {void}
  */
 
-module.exports = async function(magazine) {
+module.exports = async function (magazine) {
   const number = magazine['numero'];
   const date = magazine['data'];
-  
+
   const process = magazine['processo'];
   const debug = new Debug();
 
@@ -27,37 +27,37 @@ module.exports = async function(magazine) {
     };
 
     if (doc.hasOwnProperty('data-deposito')) {
-      data.depositDate = moment(doc['data-deposito'], 'DD/MM/YYYY').
-          format('YYYY/MM/DD');
+      data.depositDate = moment(doc['data-deposito'], 'DD/MM/YYYY').format(
+        'YYYY/MM/DD'
+      );
     }
 
     if (doc.hasOwnProperty('data-concessao')) {
-      data.grantDate = moment(doc['data-concessao'], 'DD/MM/YYYY').
-          format('YYYY/MM/DD');
+      data.grantDate = moment(doc['data-concessao'], 'DD/MM/YYYY').format(
+        'YYYY/MM/DD'
+      );
     }
 
     if (doc.hasOwnProperty('data-vigencia')) {
-      data.effectiveDate = moment(doc['data-vigencia'], 'DD/MM/YYYY').
-          format('YYYY/MM/DD');
+      data.effectiveDate = moment(doc['data-vigencia'], 'DD/MM/YYYY').format(
+        'YYYY/MM/DD'
+      );
     }
 
     if (doc.hasOwnProperty('marca')) {
       let brand = doc.marca,
-          _brand = {};
+        _brand = {};
 
-      if (brand.hasOwnProperty('nome'))
-        _brand.name = brand.nome;
+      if (brand.hasOwnProperty('nome')) _brand.name = brand.nome;
 
       if (brand.hasOwnProperty('apresentacao'))
         _brand.presentation = brand.apresentacao;
 
-      if (brand.hasOwnProperty('natureza'))
-        _brand.nature = brand.natureza;
+      if (brand.hasOwnProperty('natureza')) _brand.nature = brand.natureza;
       data.brand = _brand;
     }
 
     if (doc.hasOwnProperty('lista-classe-nice')) {
-
       let _nice = doc['lista-classe-nice'];
 
       data.listNiceClass = {};
@@ -82,7 +82,6 @@ module.exports = async function(magazine) {
     }
 
     if (doc.hasOwnProperty('classes-vienna')) {
-
       let _vienna = Object.values(doc['classes-vienna']);
 
       data.viennaClasses = {};
@@ -91,16 +90,14 @@ module.exports = async function(magazine) {
       if (Array.isArray(_vienna[1])) {
         data.viennaClasses.viennaClass = [];
         for (let code of _vienna[1]) {
-          data.viennaClasses.viennaClass.push({'code': code['codigo']});
+          data.viennaClasses.viennaClass.push({ code: code['codigo'] });
         }
       } else {
-        data.viennaClasses.viennaClass = {'code': _vienna[1]['codigo']};
+        data.viennaClasses.viennaClass = { code: _vienna[1]['codigo'] };
       }
-
     }
 
     if (doc.hasOwnProperty('despachos')) {
-
       let _dispatch = Object.values(doc['despachos']);
 
       data.dispatches = {};
@@ -112,11 +109,13 @@ module.exports = async function(magazine) {
       }
 
       if (_dispatch[0].hasOwnProperty('protocolo')) {
-
         data.dispatches.protocol = {
           number: _dispatch[0].protocolo.numero,
-          date: new Date(moment(_dispatch[0].protocolo.data, 'DD/MM/YYYY').
-              format('YYYY/MM/DD')),
+          date: new Date(
+            moment(_dispatch[0].protocolo.data, 'DD/MM/YYYY').format(
+              'YYYY/MM/DD'
+            )
+          ),
           serviceCode: _dispatch[0].protocolo.codigoServico,
           attorney: _dispatch[0].protocolo.procurador,
         };
@@ -124,21 +123,29 @@ module.exports = async function(magazine) {
         if (_dispatch[0].protocolo.hasOwnProperty('requerente')) {
           data.dispatches.protocol.applicant = {};
 
-          if (_dispatch[0].protocolo.requerente.hasOwnProperty(
-              'nome-razao-social')) {
-            let _companyName = _dispatch[0].protocolo.requerente['nome-razao-social'];
-            if (typeof _companyName != null && typeof _companyName !=
-                'undefined') {
+          if (
+            _dispatch[0].protocolo.requerente.hasOwnProperty(
+              'nome-razao-social'
+            )
+          ) {
+            let _companyName =
+              _dispatch[0].protocolo.requerente['nome-razao-social'];
+            if (
+              typeof _companyName != null &&
+              typeof _companyName != 'undefined'
+            ) {
               data.dispatches.protocol.applicant.companyName = _companyName;
             }
           }
 
           if (_dispatch[0].protocolo.requerente.hasOwnProperty('pais')) {
-            data.dispatches.protocol.applicant.country = _dispatch[0].protocolo.requerente.pais;
+            data.dispatches.protocol.applicant.country =
+              _dispatch[0].protocolo.requerente.pais;
           }
 
           if (_dispatch[0].protocolo.requerente.hasOwnProperty('uf')) {
-            data.dispatches.protocol.applicant.state = _dispatch[0].protocolo.requerente.uf;
+            data.dispatches.protocol.applicant.state =
+              _dispatch[0].protocolo.requerente.uf;
           }
         }
       }
@@ -146,9 +153,8 @@ module.exports = async function(magazine) {
 
     if (doc.hasOwnProperty('titulares')) {
       if (doc['titulares'].hasOwnProperty('titular')) {
-
         let _holders = doc['titulares'];
-        let holder = new Object;
+        let holder = new Object();
 
         if (_holders.titular.hasOwnProperty('nome-razao-social'))
           holder.companyName = _holders.titular['nome-razao-social'];
@@ -159,7 +165,7 @@ module.exports = async function(magazine) {
         if (_holders.titular.hasOwnProperty('uf'))
           holder.state = _holders.titular['uf'];
 
-        data.holders = {holder: holder};
+        data.holders = { holder: holder };
       }
     }
 
@@ -192,18 +198,19 @@ module.exports = async function(magazine) {
       if (Array.isArray(_priority.prioridade)) {
         data.unionistPriority.priority = [];
         for (let priority of _priority.prioridade) {
-
           data.unionistPriority.priority.push({
             date: new Date(
-                moment(priority.data, 'DD/MM/YYYY').format('YYYY/MM/DD')),
+              moment(priority.data, 'DD/MM/YYYY').format('YYYY/MM/DD')
+            ),
             number: priority.numero,
             country: priority.pais,
           });
         }
       } else {
         data.unionistPriority.priority = {
-          date: new Date(moment(_priority.prioridade.data, 'DD/MM/YYYY').
-              format('YYYY/MM/DD')),
+          date: new Date(
+            moment(_priority.prioridade.data, 'DD/MM/YYYY').format('YYYY/MM/DD')
+          ),
           number: _priority.prioridade.numero,
           country: _priority.prioridade.pais,
         };
@@ -226,15 +233,16 @@ module.exports = async function(magazine) {
 
       if (doc['classe-nacional'].hasOwnProperty('sub-classes-nacional')) {
         let subNatClass = Object.values(
-            doc['classe-nacional']['sub-classes-nacional']);
+          doc['classe-nacional']['sub-classes-nacional']
+        );
 
         if (Array.isArray(subNatClass[0])) {
           _national.subNationalClass = [];
           for (let sub of subNatClass[0]) {
-            _national.subNationalClass.push({code: sub.codigo});
+            _national.subNationalClass.push({ code: sub.codigo });
           }
         } else {
-          _national.subNationalClass = {code: subNatClass[0].codigo};
+          _national.subNationalClass = { code: subNatClass[0].codigo };
         }
       }
 

@@ -68,12 +68,10 @@ async function classViennaTrap(doc) {
   if (!doc.match(/\W*(\*POR)\W*/)) {
     let sp = doc.split(' ');
     let edition = sp[0].match(/[0-9]/);
-    console.warn('EDITION > ', edition);
 
     if (edition && edition.length > 0) vienna.edition = edition[0];
 
     sp.splice(0, 1);
-    console.warn('SP > ', sp);
 
     if (sp.length < 2) {
       vienna.viennaClass = { code: sp.toString() };
@@ -119,7 +117,6 @@ async function nationalClassTrap(doc) {
 
   let code = _natCode[0];
   let subNatCode = _natCode.filter((n) => n != code);
-  console.warn('SUBNAT > ', subNatCode);
 
   if (subNatCode.length < 2) {
     subNatCode = { code: subNatCode[0] };
