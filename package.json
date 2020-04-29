@@ -5,6 +5,7 @@
   "main": "inpi.js",
   "scripts": {
     "sync": "nodemon ./app/providers/scripts/inpiSync.js",
+    "syncByCron": "nodemon ./app/providers/cron/Scheduler.js",
     "serve": "nodemon index.js"
   },
   "author": " <derick.kichize@infodesk.com>",

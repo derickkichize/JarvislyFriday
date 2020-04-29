@@ -9,7 +9,7 @@ module.exports = () => {
   let jinpi = new Jinpi();
 
   jinpi.setDate({
-    startDate: '01/01/2000',
+    startDate: '01/04/2020',
     endDate: moment().format('DD/MM/YYYY').toString(),
   });
 

@@ -8,5 +8,5 @@ const ABSPATH = '../../jobs/';
  * cron.schedule("[cron-time]", require(ABSPATH+[routine-name]);)
  */
 module.exports = (() => {
-  cron.schedule('* 0 * * TUE', require(ABSPATH + 'inpi'));
+  cron.schedule('* * * * TUE', require(ABSPATH + 'inpi'));
 })();
