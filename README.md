@@ -5,7 +5,7 @@
 
 Para atualizar o big data utilize o seguinte comando:
 ```console 
-user@host666:~/JarvislyFriday$ npm run inpiSync
+user@host666:~/JarvislyFriday$ npm run sync
 ```
 
 ---
